@@ -5,34 +5,54 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.pamstonks.adapters.SearchRecyclerViewAdapter
 import com.example.pamstonks.databinding.FragmentSearchBinding
+import com.example.pamstonks.dataclasses.SearchResult
+import com.example.pamstonks.viewmodels.SearchResultViewModel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val model: SearchResultViewModel by viewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val recyclerview = view.findViewById<RecyclerView>(R.id.resultsView)
+        recyclerview.layoutManager = LinearLayoutManager(view.context)
+
+        val resultsObserver = Observer<SearchResult> { newResults ->
+            val adapter = SearchRecyclerViewAdapter(newResults.results)
+            recyclerview.adapter = adapter
+        }
+
+        model.currentResults.observe(viewLifecycleOwner, resultsObserver)
+
         binding.buttonSecond.setOnClickListener {
             lifecycleScope.launch {
-                //binding.textviewSecond.text = StockAPI.searchForStocks("a")
+                val str = StockAPI.searchForStocks(binding.searchCompanyTextBox.text.toString())
+                val data = Json{ignoreUnknownKeys = true}.decodeFromString<SearchResult>(str)
+
+                model.currentResults.postValue(data)
             }
         }
     }

@@ -29,7 +29,7 @@ class StockAPI {
         }
 
         suspend fun searchForStocks(name: String): String {
-            return getStockData("v3/reference/tickers?search=$name&active=true&sort=ticker&order=asc")
+            return getStockData("v3/reference/tickers?search=$name&limit=20")
         }
     }
 }
