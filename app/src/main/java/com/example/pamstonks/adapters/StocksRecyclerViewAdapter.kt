@@ -1,14 +1,14 @@
 package com.example.pamstonks.adapters
 
-import androidx.recyclerview.widget.RecyclerView
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pamstonks.R
 import com.example.pamstonks.dataclasses.Stock
 
-class SearchRecyclerViewAdapter(private val dataSet: List<Stock>, private val onItemClicked: (Stock) -> Unit) : RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder>() {
+class StocksRecyclerViewAdapter(private val dataSet: List<Stock>, private val onItemClicked: (Stock) -> Unit) : RecyclerView.Adapter<StocksRecyclerViewAdapter.ViewHolder>() {
     class ViewHolder(view: View, onItemClicked: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
         init {
             itemView.setOnClickListener {

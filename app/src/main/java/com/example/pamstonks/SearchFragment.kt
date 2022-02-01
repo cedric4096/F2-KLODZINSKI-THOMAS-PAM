@@ -5,15 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pamstonks.adapters.SearchRecyclerViewAdapter
 import com.example.pamstonks.databinding.FragmentSearchBinding
 import com.example.pamstonks.dataclasses.SearchResult
+import com.example.pamstonks.dataclasses.Stock
 import com.example.pamstonks.viewmodels.SearchResultViewModel
+import com.example.pamstonks.viewmodels.StockViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
@@ -23,12 +26,13 @@ class SearchFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val model: SearchResultViewModel by viewModels()
+    private val model: SearchResultViewModel by activityViewModels()
+    private val stocks: StockViewModel by activityViewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -41,7 +45,13 @@ class SearchFragment : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(view.context)
 
         val resultsObserver = Observer<SearchResult> { newResults ->
-            val adapter = SearchRecyclerViewAdapter(newResults.results)
+            val adapter = SearchRecyclerViewAdapter(newResults.results) {
+                val nList: MutableList<Stock> = stocks.currentStocks.value!!
+                nList.add(it)
+                stocks.currentStocks.postValue(nList)
+
+                findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            }
             recyclerview.adapter = adapter
         }
 

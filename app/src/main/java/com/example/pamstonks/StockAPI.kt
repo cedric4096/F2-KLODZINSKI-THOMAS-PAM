@@ -31,5 +31,13 @@ class StockAPI {
         suspend fun searchForStocks(name: String): String {
             return getStockData("v3/reference/tickers?search=$name&limit=20")
         }
+
+        suspend fun getStockPreviousCloseByTicker(ticker: String): String {
+            return getStockData("v2/aggs/ticker/$ticker/prev")
+        }
+
+        suspend fun getStockAggregateBarsByTicker(ticker: String, date: String): String {
+            return getStockData("v2/aggs/ticker/$ticker/range/1/hour/$date/$date")
+        }
     }
 }
