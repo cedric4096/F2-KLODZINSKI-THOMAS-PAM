@@ -9,7 +9,5 @@ data class SearchResult (
     val status: String,
 
     @SerialName("request_id")
-    val requestID: String,
-
-    val count: Long
+    val requestID: String
 )

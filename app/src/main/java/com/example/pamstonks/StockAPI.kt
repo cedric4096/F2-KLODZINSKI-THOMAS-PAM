@@ -6,6 +6,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 class StockAPI {
     companion object {
@@ -29,15 +31,21 @@ class StockAPI {
         }
 
         suspend fun searchForStocks(name: String): String {
-            return getStockData("v3/reference/tickers?search=$name&limit=20")
+            return getStockData("v3/reference/tickers?search=$name&active=true&sort=ticker&order=asc&limit=10")
         }
 
         suspend fun getStockPreviousCloseByTicker(ticker: String): String {
             return getStockData("v2/aggs/ticker/$ticker/prev")
         }
 
-        suspend fun getStockAggregateBarsByTicker(ticker: String, date: String): String {
-            return getStockData("v2/aggs/ticker/$ticker/range/1/hour/$date/$date")
+        suspend fun getStockAggregateBarsByTicker(ticker: String): String {
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val calendar = GregorianCalendar()
+            val now = format.format(calendar.time)
+            calendar.add(Calendar.MONTH, -1)
+            val monthAgo = format.format(calendar.time)
+
+            return getStockData("v2/aggs/ticker/$ticker/range/1/day/$monthAgo/$now")
         }
     }
 }

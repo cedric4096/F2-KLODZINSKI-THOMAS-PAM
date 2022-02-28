@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PreviousCloseResult (
+data class AggregateResult (
     val results: List<SessionResult>,
     val status: String,
 
@@ -22,5 +22,7 @@ data class SessionResult (
     @SerialName("o")
     val opening: Double,
     @SerialName("c")
-    val closing: Double
+    val closing: Double,
+    @SerialName("t")
+    val date: Double
 )
