@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">PamStonks</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Accueil</string>
+    <string name="home_fragment_label">Accueil</string>
     <string name="search_fragment_label">Recherche de sociétés</string>
     <string name="add_company_tooltip">Ajouter</string>
     <string name="search_button">Rechercher</string>
     <string name="search_bar_hint">Nom ou code</string>
     <string name="add_stock_tooltip">Ajouter une société</string>
+    <string name="delete_button_description">Supprimer</string>
 </resources>

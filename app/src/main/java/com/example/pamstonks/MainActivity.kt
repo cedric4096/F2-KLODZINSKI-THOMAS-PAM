@@ -1,12 +1,17 @@
 package com.example.pamstonks
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.room.Room
 import com.example.pamstonks.databinding.ActivityMainBinding
+import com.example.pamstonks.viewmodels.StockViewModel
+import com.example.pamstonks.viewmodels.StockViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration

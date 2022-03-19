@@ -1,11 +1,28 @@
 package com.example.pamstonks.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.pamstonks.repositories.StockRepository
 import com.example.pamstonks.dataclasses.Stock
+import kotlinx.coroutines.launch
 
-class StockViewModel : ViewModel() {
-    val currentStocks: MutableLiveData<MutableList<Stock>> by lazy {
-        MutableLiveData<MutableList<Stock>>(mutableListOf())
+class StockViewModel(private val repository: StockRepository) : ViewModel() {
+    val allStocks: LiveData<List<Stock>> = repository.allStocks.asLiveData()
+
+    fun insert(stock: Stock) = viewModelScope.launch {
+        repository.insertAll(stock)
+    }
+
+    fun delete(stock: Stock) = viewModelScope.launch {
+        repository.delete(stock)
+    }
+}
+
+class StockViewModelFactory(private val repository: StockRepository) : ViewModelProvider.Factory {
+    override fun <T: ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        if (modelClass.isAssignableFrom(StockViewModel::class.java)) {
+            return StockViewModel(repository) as T
+        }
+        throw IllegalArgumentException()
     }
 }

@@ -1,25 +1,29 @@
-package com.example.pamstonks
+package com.example.pamstonks.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pamstonks.PamstonksApplication
+import com.example.pamstonks.R
+import com.example.pamstonks.StockAPI
 import com.example.pamstonks.adapters.SearchRecyclerViewAdapter
 import com.example.pamstonks.databinding.FragmentSearchBinding
 import com.example.pamstonks.dataclasses.SearchResult
 import com.example.pamstonks.dataclasses.Stock
 import com.example.pamstonks.viewmodels.SearchResultViewModel
 import com.example.pamstonks.viewmodels.StockViewModel
+import com.example.pamstonks.viewmodels.StockViewModelFactory
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -27,7 +31,11 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val model: SearchResultViewModel by activityViewModels()
-    private val stocks: StockViewModel by activityViewModels()
+    private val stocks: StockViewModel by activityViewModels {
+        StockViewModelFactory((activity?.application as PamstonksApplication).repository)
+    }
+
+    private val json: Json = Json { ignoreUnknownKeys = true }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +46,7 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,11 +55,8 @@ class SearchFragment : Fragment() {
 
         val resultsObserver = Observer<SearchResult> { newResults ->
             val adapter = SearchRecyclerViewAdapter(newResults.results) {
-                val nList: MutableList<Stock> = stocks.currentStocks.value!!
-                nList.add(it)
-                stocks.currentStocks.postValue(nList)
-
-                findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+                stocks.insert(it)
+                findNavController().navigate(R.id.action_SearchFragment_to_HomeFragment)
             }
             recyclerview.adapter = adapter
         }
@@ -60,7 +66,7 @@ class SearchFragment : Fragment() {
         binding.buttonSecond.setOnClickListener {
             lifecycleScope.launch {
                 val str = StockAPI.searchForStocks(binding.searchCompanyTextBox.text.toString())
-                val data = Json{ignoreUnknownKeys = true}.decodeFromString<SearchResult>(str)
+                val data = json.decodeFromString<SearchResult>(str)
 
                 model.currentResults.postValue(data)
             }

@@ -12,17 +12,3 @@ data class AggregateResult (
     val requestID: String,
     val count: Long
 )
-
-@Serializable
-data class SessionResult (
-    @SerialName("h")
-    val highest: Double,
-    @SerialName("l")
-    val lowest: Double,
-    @SerialName("o")
-    val opening: Double,
-    @SerialName("c")
-    val closing: Double,
-    @SerialName("t")
-    val date: Double
-)

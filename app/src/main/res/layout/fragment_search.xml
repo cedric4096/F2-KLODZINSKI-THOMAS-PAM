@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchFragment"
+    tools:context=".ui.SearchFragment"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,9 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="8dp"
+            android:autofillHints="@null"
             android:ems="10"
             android:hint="@string/search_bar_hint"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/button_second"
