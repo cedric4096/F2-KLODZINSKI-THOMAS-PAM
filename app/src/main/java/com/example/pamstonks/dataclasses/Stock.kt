@@ -1,24 +1,22 @@
 package com.example.pamstonks.dataclasses
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Stock entity. Stores basic stock information.
+ */
 @Entity
 @Serializable
 data class Stock (
+    /**
+     * Ticker of the stock, primary key for the database.
+     */
     @PrimaryKey
     val ticker: String,
-    val name: String,
-    val market: String,
-    val type: String? = null,
-    val active: Boolean,
-    @ColumnInfo(name = "currency_name")
-    @SerialName("currency_name")
-    val currencyName: String,
-    @ColumnInfo(name = "last_updated_utc")
-    @SerialName("last_updated_utc")
-    val lastUpdatedUTC: String
+    /**
+     * Name of the associated company
+     */
+    val name: String
 )

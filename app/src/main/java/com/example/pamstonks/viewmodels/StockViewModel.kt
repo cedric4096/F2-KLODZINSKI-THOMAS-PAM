@@ -5,6 +5,9 @@ import com.example.pamstonks.repositories.StockRepository
 import com.example.pamstonks.dataclasses.Stock
 import kotlinx.coroutines.launch
 
+/**
+ * Stock view model. Uses items from database and allows inserting and deleting.
+ */
 class StockViewModel(private val repository: StockRepository) : ViewModel() {
     val allStocks: LiveData<List<Stock>> = repository.allStocks.asLiveData()
 
@@ -17,6 +20,9 @@ class StockViewModel(private val repository: StockRepository) : ViewModel() {
     }
 }
 
+/**
+ * StockViewModel factory. Build the view model with the StockRepository.
+ */
 class StockViewModelFactory(private val repository: StockRepository) : ViewModelProvider.Factory {
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")

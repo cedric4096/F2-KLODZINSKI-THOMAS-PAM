@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">PamStonks</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="home_fragment_label">Accueil</string>
     <string name="search_fragment_label">Recherche de sociétés</string>
     <string name="add_company_tooltip">Ajouter</string>
@@ -10,4 +9,8 @@
     <string name="delete_button_description">Supprimer</string>
     <string name="loading_error">Erreur de chargement, veuillez recharger la page</string>
     <string name="results_count">%1$d résultat(s)</string>
+    <string name="opening_text">OUVERTURE</string>
+    <string name="highest_text">+ HAUT</string>
+    <string name="lowest_text">+ BAS</string>
+    <string name="stock_variation_text">Progression sur le mois</string>
 </resources>

@@ -33,6 +33,9 @@ class StockFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    /**
+     * JSON deserializer, which ignores unknown keys to avoid errors.
+     */
     private val json: Json = Json { ignoreUnknownKeys = true }
 
     override fun onCreateView(
@@ -48,42 +51,43 @@ class StockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Retrieves the passed bundle data
         binding.tickerTextView.text = arguments?.getString("stockTicker")
 
+        // Async block for network requests
         lifecycleScope.launch {
-            var str = StockAPI.getStockPreviousCloseByTicker(arguments?.getString("stockTicker")!!)
-            var data = json.decodeFromString<AggregateResult>(str)
+            // Retrieves stock sessions data
+            val str = StockAPI.getStockAggregateBarsByTicker(arguments?.getString("stockTicker")!!)
+            val data = json.decodeFromString<AggregateResult>(str)
 
+            // If no data (no network or more than 5 calls per minute), displays an error toast
             if (data.count == 0L) {
                 Toast.makeText(context, R.string.loading_error, Toast.LENGTH_SHORT).show()
             } else {
-                binding.closeValueTextView.text = "$${data.results[0].closing}"
-                binding.highestValueTextView.text = data.results[0].highest.toString()
-                binding.lowestValueTextView.text = data.results[0].lowest.toString()
-                binding.openingValueTextView.text = data.results[0].opening.toString()
+                // Sets text views data from the last session
+                binding.closeValueTextView.text = "$${data.results.last().closing}"
+                binding.highestValueTextView.text = data.results.last().highest.toString()
+                binding.lowestValueTextView.text = data.results.last().lowest.toString()
+                binding.openingValueTextView.text = data.results.last().opening.toString()
 
-                val percentage = if (data.results[0].closing > data.results[0].opening) {
+                // Calculates the variation percentage value and color
+                val percentage = if (data.results.last().closing > data.results.last().opening) {
                     binding.percentageTextView.setTextColor(Color.parseColor("#00ff40"))
-                    (data.results[0].closing - data.results[0].opening) / data.results[0].closing * 100
+                    (data.results.last().closing - data.results.last().opening) / data.results.last().closing * 100
                 } else {
                     binding.percentageTextView.setTextColor(Color.parseColor("#ff0000"))
-                    (data.results[0].closing - data.results[0].opening) / data.results[0].opening * 100
+                    (data.results.last().closing - data.results.last().opening) / data.results.last().opening * 100
                 }
 
+                // Displays the percentage with only 2 digits after the dot
                 binding.percentageTextView.text = "${if (percentage > 0) "+" else ""}${
                     String.format(
                         "%.2f",
                         percentage
                     )
                 }%"
-            }
 
-            str = StockAPI.getStockAggregateBarsByTicker(arguments?.getString("stockTicker")!!)
-            data = json.decodeFromString(str)
-
-            if (data.count == 0L) {
-                Toast.makeText(context, R.string.loading_error, Toast.LENGTH_SHORT).show()
-            } else {
+                // Chart setup
                 binding.chart.axisLeft.setDrawGridLines(true)
                 val xAxis: XAxis = binding.chart.xAxis
                 xAxis.setDrawGridLines(false)
@@ -103,6 +107,7 @@ class StockFragment : Fragment() {
 
                 val entries: ArrayList<CandleEntry> = ArrayList()
 
+                // Creating entries for each session
                 for (item in data.results) {
                     entries.add(CandleEntry(item.date.toFloat(), item.highest.toFloat(), item.lowest.toFloat(), item.opening.toFloat(), item.closing.toFloat()))
                 }
@@ -119,6 +124,7 @@ class StockFragment : Fragment() {
                 dataSet.increasingPaintStyle = Paint.Style.FILL_AND_STROKE
                 dataSet.neutralColor = Color.BLUE
 
+                // Sets the chart entries and redraws it
                 val chartData = CandleData(dataSet)
                 binding.chart.data = chartData
                 binding.chart.invalidate()
@@ -126,6 +132,9 @@ class StockFragment : Fragment() {
         }
     }
 
+    /**
+     * Formatter class for the graph, formats the displayed dates.
+     */
     inner class MyAxisFormatter : IndexAxisValueFormatter() {
         override fun getFormattedValue(value: Float, axis: AxisBase?): String {
             val calendar = GregorianCalendar()
