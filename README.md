@@ -12,19 +12,19 @@ Pamstonks est une application permettant de connaître les cours des entreprises
 
 #### Accueil
 
-![Screenshot_20220319_223255](https://user-images.githubusercontent.com/22870407/159139153-c5b2bf1d-5640-41f1-9cc4-6abb288646e9.png)
+![Screenshot_20220319_223255](https://user-images.githubusercontent.com/22870407/159139219-51d035c1-762c-4ebf-b778-e47436496d6e.png)
 
 Sur la page d'accueil, on trouve la liste des entreprises choisies par l'utilisateur. Un clic sur une entreprise de la liste ouvre la page de détails pour cette dernière. La liste est alimentée par la base de données. L'utilisateur peut supprimer une entreprise de la liste (et de la base de données) en cliquant sur le bouton Supprimer dans un objet de la liste. Un bouton flottant, en bas à droite de l'écran, permet d'accéder à la page de recherche pour ajouter une nouvelle entreprise.
 
 #### Page de recherche
 
-![Screenshot_20220319_223403](https://user-images.githubusercontent.com/22870407/159139169-abe1c5fe-7fc7-43a4-96c3-19f6f9b9d4b5.png)
+![Screenshot_20220319_223403](https://user-images.githubusercontent.com/22870407/159139226-b7c8c4c1-5a02-4b04-832f-8a1a396ddfa8.png)
 
 Cette page permet d'entrer un nom d'entreprise ou un identifiant bousier (ticker). Un appel sur l'API est alors réalisé et retourne les résultats de recherche. On affiche de plus le nombre de résultats trouvés. Un clic sur un résultat l'ajoute dans la base de données et nous ramène à l'accueil.
 
 #### Page de détails
 
-![Screenshot_20220319_223214](https://user-images.githubusercontent.com/22870407/159139178-2b29f746-e443-4aa9-a908-497fc6625220.png)
+![Screenshot_20220319_223214](https://user-images.githubusercontent.com/22870407/159139227-a5bc45cf-9b8c-4e92-8ad3-80d1f8d7166f.png)
 
 Cette page affiche les détails du cours d'un entreprise. On affiche ainsi les valeurs de la dernière séance. On trouve la valeur d'ouverture (début de la séance), minimale, maximale et de fermeture (fin de la séance). En-dessous, un graphique en boîtes à moutaches affiche sous forme de barres les différentes valeurs du cours, sur le mois écoulé. Chaque barre, représentant une séance, est composée :
 
