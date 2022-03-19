@@ -5,6 +5,7 @@ TP PAM - Cédric Klodzinski, Baptiste Thomas
 ## Application
 
 ![Logo](https://github.com/cedric4096/F2-KLODZINSKI-THOMAS-PAM/blob/2343bbeb77f2e695d0eb631db04b22c422e4ab86/app/src/main/res/drawable/app_icon.webp)
+
 Pamstonks est une application permettant de connaître les cours des entreprises côtées sur les bourses américaines. Elle offre de plus une vue graphique pour visualiser les fluctuations des cours sur le mois écoulé.
 
 ### Pages de l'application
