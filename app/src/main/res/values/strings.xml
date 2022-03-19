@@ -8,4 +8,6 @@
     <string name="search_bar_hint">Nom ou code</string>
     <string name="add_stock_tooltip">Ajouter une société</string>
     <string name="delete_button_description">Supprimer</string>
+    <string name="loading_error">Erreur de chargement, veuillez recharger la page</string>
+    <string name="results_count">%1$d résultat(s)</string>
 </resources>

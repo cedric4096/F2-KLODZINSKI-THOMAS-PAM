@@ -17,7 +17,6 @@ import com.example.pamstonks.StockAPI
 import com.example.pamstonks.adapters.SearchRecyclerViewAdapter
 import com.example.pamstonks.databinding.FragmentSearchBinding
 import com.example.pamstonks.dataclasses.SearchResult
-import com.example.pamstonks.dataclasses.Stock
 import com.example.pamstonks.viewmodels.SearchResultViewModel
 import com.example.pamstonks.viewmodels.StockViewModel
 import com.example.pamstonks.viewmodels.StockViewModelFactory
@@ -59,11 +58,12 @@ class SearchFragment : Fragment() {
                 findNavController().navigate(R.id.action_SearchFragment_to_HomeFragment)
             }
             recyclerview.adapter = adapter
+            binding.resultCountTextView.text = String.format(resources.getString(R.string.results_count), newResults.results.count())
         }
 
         model.currentResults.observe(viewLifecycleOwner, resultsObserver)
 
-        binding.buttonSecond.setOnClickListener {
+        binding.searchButton.setOnClickListener {
             lifecycleScope.launch {
                 val str = StockAPI.searchForStocks(binding.searchCompanyTextBox.text.toString())
                 val data = json.decodeFromString<SearchResult>(str)

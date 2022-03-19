@@ -31,21 +31,33 @@ class StockAPI {
         }
 
         suspend fun searchForStocks(name: String): String {
-            return getStockData("v3/reference/tickers?search=$name&active=true&sort=ticker&order=asc&limit=10")
+            return try {
+                getStockData("v3/reference/tickers?search=$name&active=true&sort=ticker&order=asc&limit=10")
+            } catch (e: Exception) {
+                "{\"status\": \"0\", \"results\": []}"
+            }
         }
 
         suspend fun getStockPreviousCloseByTicker(ticker: String): String {
-            return getStockData("v2/aggs/ticker/$ticker/prev")
+            return try {
+                getStockData("v2/aggs/ticker/$ticker/prev")
+            } catch (e: Exception) {
+                "{\"status\": \"0\", \"results\": [], \"count\": 0}"
+            }
         }
 
         suspend fun getStockAggregateBarsByTicker(ticker: String): String {
-            val format = SimpleDateFormat("yyyy-MM-dd")
+            val format = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val calendar = GregorianCalendar()
             val now = format.format(calendar.time)
             calendar.add(Calendar.MONTH, -1)
             val monthAgo = format.format(calendar.time)
 
-            return getStockData("v2/aggs/ticker/$ticker/range/1/day/$monthAgo/$now")
+            return try {
+                getStockData("v2/aggs/ticker/$ticker/range/1/day/$monthAgo/$now")
+            } catch (e: Exception) {
+                "{\"status\": \"0\", \"results\": [], \"count\": 0}"
+            }
         }
     }
 }
